@@ -37,7 +37,7 @@
       }
       .wellpanel {
         width: 100%;
-        height: 90%;
+        height: 100%;
         cursor: crosshair;
       }
       .point {
@@ -48,6 +48,9 @@
         font-size:28px;
         cursor:default;
         position:absolute;
+      }
+      .wrongCoords {
+        color:#BEBEBE;
       }
     </style>
   </head>
@@ -84,7 +87,7 @@
           <!--span class="glyphicon glyphicon-record point">fdvfd</span>
           <span class="glyphicon glyphicon-map-marker facility"></span-->
           <div class="well wellpanel" id="well"></div>
-          <div style="margin-left:30%;width:40%">
+          <!-- div style="margin-left:30%;width:40%">
             <ul class="pager">
               <li id="start" class="previous"><a href="#">|&larr; Start</a></li>
               <li id="prev"><a href="#">&larr; Prev</a></li>
@@ -92,7 +95,7 @@
               <li id="next"><a href="#">Next &rarr;</a></li>
               <li id="result" class="next"><a href="#">Result &rarr;|</a></li>
             </ul>
-          </div>
+          </div -->
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-3 col-md-offset-9 main">
           <div style="margin-bottom:20px">
@@ -104,21 +107,24 @@
           <input id="k" type="text" class="form-control" style="width:70%">
           <h4>Objects coords:</h4>
           <table class="table table-bordered coordstable">
+            <thead>
+              <tr><td>#</td><td>x</td><td>y</td><td><span class="glyphicon glyphicon-record"></span></td></tr>
+            </thead>
             <tbody>
-              <tr><td><input type="text"></td><td><input type="text"></td></tr>
-              <tr><td><input type="text"></td><td><input type="text"></td></tr>
-              <tr><td><input type="text"></td><td><input type="text"></td></tr>
-              <tr><td><input type="text"></td><td><input type="text"></td></tr>
-              <tr><td><input type="text"></td><td><input type="text"></td></tr>
-              <tr><td><input type="text"></td><td><input type="text"></td></tr>
-              <tr><td><input type="text"></td><td><input type="text"></td></tr>
+              <tr><td>1</td><td><input type="text"></td><td><input type="text"></td><td><span class="glyphicon glyphicon-remove"></span></td></tr>
+              <tr><td>2</td><td><input type="text"></td><td><input type="text"></td><td><span class="glyphicon glyphicon-remove"></span></td></tr>
+              <tr><td>3</td><td><input type="text"></td><td><input type="text"></td><td><span class="glyphicon glyphicon-remove"></span></td></tr>
+              <tr><td>4</td><td><input type="text"></td><td><input type="text"></td><td><span class="glyphicon glyphicon-remove"></span></td></tr>
+              <tr><td>5</td><td><input type="text"></td><td><input type="text"></td><td><span class="glyphicon glyphicon-remove"></span></td></tr>
+              <tr><td>6</td><td><input type="text"></td><td><input type="text"></td><td><span class="glyphicon glyphicon-remove"></span></td></tr>
+              <tr><td>7</td><td><input type="text"></td><td><input type="text"></td><td><span class="glyphicon glyphicon-remove"></span></td></tr>
             </tbody>
           </table>
           <h4>Solution:</h4>
           <table id="resultTable" class="table table-bordered coordstable">
             <tbody>
-              <tr><td><input type="text" readonly></td><td><input type="text" readonly></td></tr>
-              <tr><td><input type="text" readonly></td><td><input type="text" readonly></td></tr>
+              <tr><td>1</td><td><input type="text" readonly></td><td><input type="text" readonly></td></tr>
+              <tr><td>2</td><td><input type="text" readonly></td><td><input type="text" readonly></td></tr>
             </tbody>
           </table>
         </div>

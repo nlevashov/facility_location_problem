@@ -5,32 +5,100 @@ lastStringNum = 0;
 tableSize = 7;
 pointsNum = 0;
 
+function checkCoord () {
+    index = $('td input').index(this);
+    var id = Math.floor(index / 2);
+
+    var x;
+    var y;
+    if (index % 2 == 0) {
+        x = $('td input').eq(index).val();
+        y = $('td input').eq(index + 1).val();
+    } else {
+        x = $('td input').eq(index - 1).val();
+        y = $('td input').eq(index).val();
+    }
+
+    if ((x == "") || (y == "")) {
+        $('td span').eq(id + 1).removeClass('glyphicon-ok');
+        $('td span').eq(id + 1).addClass('glyphicon-remove');
+        if (id < pointsNum) { $('#workBlock span').eq(id).addClass('wrongCoords'); }
+        return;
+    }
+
+    x = x.replace(/,/g, ".");
+    y = y.replace(/,/g, ".");
+
+    if (!isNaN(parseFloat(x)) && isFinite(x)) {
+        var x = parseFloat(x);
+        if ((x < 0) || (x > well.clientWidth - 1)) {
+            $('td span').eq(id + 1).removeClass('glyphicon-ok');
+            $('td span').eq(id + 1).addClass('glyphicon-remove');
+            if (id < pointsNum) { $('#workBlock span').eq(id).addClass('wrongCoords'); }
+            return;
+        }
+    } else {
+        $('td span').eq(id + 1).removeClass('glyphicon-ok');
+        $('td span').eq(id + 1).addClass('glyphicon-remove');
+        if (id < pointsNum) { $('#workBlock span').eq(id).addClass('wrongCoords'); }
+        return;
+    }
+
+    if (!isNaN(parseFloat(y)) && isFinite(y)) {
+        var y = parseFloat(y);
+        if ((y < 0) || (y > well.clientWidth - 1)) {
+            $('td span').eq(id + 1).removeClass('glyphicon-ok');
+            $('td span').eq(id + 1).addClass('glyphicon-remove');
+            if (id < pointsNum) { $('#workBlock span').eq(id).addClass('wrongCoords'); }
+            return;
+        }
+    } else {
+        $('td span').eq(id + 1).removeClass('glyphicon-ok');
+        $('td span').eq(id + 1).addClass('glyphicon-remove');
+        if (id < pointsNum) { $('#workBlock span').eq(id).addClass('wrongCoords'); }
+        return;
+    }
+
+    $('td span').eq(id + 1).removeClass('glyphicon-remove');
+    $('td span').eq(id + 1).addClass('glyphicon-ok');
+
+    if (id < pointsNum) {
+        $('#workBlock span').eq(id).offset({top:y + well.offsetTop + 44, left:x + well.offsetLeft - 7});
+        if (id < pointsNum) { $('#workBlock span').eq(id).removeClass('wrongCoords'); }
+    } else {
+        addPoint(x + well.offsetLeft, y + well.offsetTop);
+    }
+}
+
 function clearAll() {
     $("#workBlock span").remove();
     $('#pointersBlock span').remove();
     $('td input').val("");
     for (var i = tableSize - 1; i >= 7; i--) {
-        $('tr').eq(i).remove();
+        $('table tbody tr').eq(i).remove();
     }
     $('#resultTable tbody tr').remove();
-    $('#resultTable tbody').append("<tr><td><input type=\"text\" readonly></td><td><input type=\"text\" readonly></td></tr>");
-    $('#resultTable tbody').append("<tr><td><input type=\"text\" readonly></td><td><input type=\"text\" readonly></td></tr>");
+    $('#resultTable tbody').append("<tr><td>1</td><td><input type=\"text\" readonly></td><td><input type=\"text\" readonly></td></tr>");
+    $('#resultTable tbody').append("<tr><td>2</td><td><input type=\"text\" readonly></td><td><input type=\"text\" readonly></td></tr>");
     lastStringNum = 0;
     pointsNum = 0;
     tableSize = 7;
 }
 
+$('td input').keyup(checkCoord);
 clearAll();
 
 function addStringIntoTable() {
-    $('table tbody').eq(0).append('<tr><td><input type="text"></td><td><input type="text"></td></tr>');
     tableSize++;
+    $('table tbody').eq(0).append('<tr><td>' + tableSize + '</td><td><input type="text"></td><td><input type="text"></td><td><span class="glyphicon glyphicon-remove"></span></td></tr>');
 }
 
 function addPoint(x, y) {
     $('td input').eq(lastStringNum * 2).val(x - well.offsetLeft);
     $('td input').eq(lastStringNum * 2 + 1).val(y - well.offsetTop);
     lastStringNum++;
+    $('td span').eq(lastStringNum).removeClass('glyphicon-remove');
+    $('td span').eq(lastStringNum).addClass('glyphicon-ok');
 
     if (lastStringNum == tableSize) { addStringIntoTable(); }
 
@@ -52,9 +120,14 @@ function addPoint(x, y) {
             lastStringNum--;
             
             this.remove();
+
+            $('td span').eq(pointsNum).removeClass('glyphicon-ok');
+            $('td span').eq(pointsNum).addClass('glyphicon-remove');
             pointsNum--;
         }
     });
+
+    $('td input').keyup(checkCoord);
 }
 
 function putPoint(event) {
@@ -63,7 +136,9 @@ function putPoint(event) {
 
 function randomPoints() {
     clearAll();
-    num = Math.floor(Math.random() * 15) + 5;
+    var k = Math.floor(Math.random() * 5) + 1;
+    $('input').eq(0).val(k);
+    var num = Math.floor(Math.random() * 15) + 5;
     for (var i = 0; i < num; i++) {
         x = Math.floor(Math.random() * well.clientWidth) + well.offsetLeft;
         y = Math.floor(Math.random() * well.clientHeight) + well.offsetTop;
@@ -129,9 +204,9 @@ function getObjects() {
                 continue;
             } else {
                 if (x == "") {
-                    alert('Error: x coordinate of object #' + i + ' is empty');
+                    alert('Error: x coordinate of object #' + (i + 1) + ' is empty');
                 } else {
-                    alert('Error: y coordinate of object #' + i + ' is empty');
+                    alert('Error: y coordinate of object #' + (i + 1) + ' is empty');
                 }
                 return;
             }
@@ -143,22 +218,22 @@ function getObjects() {
         if (!isNaN(parseFloat(x)) && isFinite(x)) {
             var x = parseFloat(x);
             if ((x < 0) || (x > well.clientWidth - 1)) {
-                alert('Error: wrong x coordinate of object #' + i + '! It must be from 0 to ' + (wall.well.clientWidth - 1) + ', to fit in the field.');
+                alert('Error: wrong x coordinate of object #' + (i + 1) + '! It must be from 0 to ' + (wall.well.clientWidth - 1) + ', to fit in the field.');
                 return;
             }
         } else {
-            alert('Error: x coordinate of object #' + i + ' is incorrect!');
+            alert('Error: x coordinate of object #' + (i + 1) + ' is incorrect!');
             return;
         }
 
         if (!isNaN(parseFloat(y)) && isFinite(y)) {
             var y = parseFloat(y);
             if ((y < 0) || (y > well.clientWidth - 1)) {
-                alert('Error: wrong y coordinate of object #' + i + '! It must be from 0 to ' + (wall.well.clientWidth - 1) + ', to fit in the field.');
+                alert('Error: wrong y coordinate of object #' + (i + 1) + '! It must be from 0 to ' + (wall.well.clientWidth - 1) + ', to fit in the field.');
                 return;
             }
         } else {
-            alert('Error: y coordinate of object #' + i + ' is incorrect!');
+            alert('Error: y coordinate of object #' + (i + 1) + ' is incorrect!');
             return;
         }
 
@@ -264,16 +339,17 @@ function addLog() {
 
 var step;
 var color = ['#ff0000', '#00ff00', '#0000ff', '#ff00ff', '#800000', '#00ffff', '#ffff00', '#808080', '#008000', '#000080', '#800080', '#808000', '#008080', '#000000']
+var resultTableSize = 2;
 
 function seeResult() {
     step = logs.length;
 
-    $('#start').removeClass('disabled');
-    $('#prev').removeClass('disabled');
-    $('#position').removeClass('disabled');
-    $('#position span').text(step + ' of ' + logs.length);
-    $('#next').addClass('disabled');
-    $('#result').addClass('disabled');
+    // $('#start').removeClass('disabled');
+    // $('#prev').removeClass('disabled');
+    // $('#position').removeClass('disabled');
+    // $('#position span').text(step + ' of ' + logs.length);
+    // $('#next').addClass('disabled');
+    // $('#result').addClass('disabled');
 
     $('#pointersBlock span').remove();
     
@@ -288,9 +364,10 @@ function seeResult() {
 }
 
 function writeResult() {
-    for (var i = 2; i < k; i++) {
-        $('#resultTable tbody').append("<tr><td><input type=\"text\" readonly></td><td><input type=\"text\" readonly></td></tr>");    
+    for (var i = resultTableSize; i < k; i++) {
+        $('#resultTable tbody').append('<tr><td>' + (i + 1) + '</td><td><input type="text" readonly></td><td><input type="text" readonly></td></tr>');
     }
+    if (resultTableSize < k) resultTableSize = k;
     for (var i = 0; i < k; i++) {
         $('#resultTable tbody tr td input').eq(i * 2).val(logs[logs.length - 1].f[i].x);
         $('#resultTable tbody tr td input').eq(i * 2 + 1).val(logs[logs.length - 1].f[i].y);
