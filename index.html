@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--link rel="shortcut icon" href="../../assets/ico/favicon.ico"-->
+
+    <title>Facility Location Problem solution with k-medians algo</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/dashboard.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+      .coordstable input {
+        border-width: medium medium 0px;
+        border-style: none none solid;
+        -moz-border-top-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        border-image: none;
+        width: 100%;
+      }
+      .wellpanel {
+        width: 100%;
+        height: 90%;
+        cursor: crosshair;
+      }
+      .point {
+        cursor:pointer;
+        position:absolute;
+      }
+      .facility {
+        font-size:28px;
+        cursor:default;
+        position:absolute;
+      }
+    </style>
+  </head>
+
+  <body style="overflow-y:scroll">
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Facility Location Problem solution with k-medians algo</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#instruction">Instructions</a></li>
+            <li><a href="#theory">Theory</a></li>
+            <li><a href="#about" data-toggle="modal" data-target="#myModal">About</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-9 sidebar">
+          <div id="workBlock"></div>
+          <div id="pointersBlock"></div>
+          <!--span class="glyphicon glyphicon-record point">fdvfd</span>
+          <span class="glyphicon glyphicon-map-marker facility"></span-->
+          <div class="well wellpanel" id="well"></div>
+          <div style="margin-left:30%;width:40%">
+            <ul class="pager">
+              <li id="start" class="previous"><a href="#">|&larr; Start</a></li>
+              <li id="prev"><a href="#">&larr; Prev</a></li>
+              <li id="position"><span>5 of 10</span></li>
+              <li id="next"><a href="#">Next &rarr;</a></li>
+              <li id="result" class="next"><a href="#">Result &rarr;|</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-3 col-md-offset-9 main">
+          <div style="margin-bottom:20px">
+            <button style="width:32.5%" type="button" class="btn btn-success" onclick="mainAlgo()">Build</button>
+            <button style="width:32.5%" type="button" class="btn btn-danger" onclick="clearAll()">Reset</button>
+            <button style="width:32.5%" type="button" class="btn btn-warning" onclick="randomPoints()">Random</button>
+          </div>
+          <h4>Facility num:</h4>
+          <input id="k" type="text" class="form-control" style="width:70%">
+          <h4>Objects coords:</h4>
+          <table class="table table-bordered coordstable">
+            <tbody>
+              <tr><td><input type="text"></td><td><input type="text"></td></tr>
+              <tr><td><input type="text"></td><td><input type="text"></td></tr>
+              <tr><td><input type="text"></td><td><input type="text"></td></tr>
+              <tr><td><input type="text"></td><td><input type="text"></td></tr>
+              <tr><td><input type="text"></td><td><input type="text"></td></tr>
+              <tr><td><input type="text"></td><td><input type="text"></td></tr>
+              <tr><td><input type="text"></td><td><input type="text"></td></tr>
+            </tbody>
+          </table>
+          <h4>Solution:</h4>
+          <table id="resultTable" class="table table-bordered coordstable">
+            <tbody>
+              <tr><td><input type="text" readonly></td><td><input type="text" readonly></td></tr>
+              <tr><td><input type="text" readonly></td><td><input type="text" readonly></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 class="modal-title" id="myModalLabel">About</h3>
+          </div>
+          <div class="modal-body">
+            This site created by Nick Levashov, student of <a href="http://mipt.ru/">MIPT</a>, on May 2014, for solving Facility Location Problems online and for demonstrating "k-medians" algorithm.
+            <h4>My contacts:</h4>
+            <span class="glyphicon glyphicon-envelope"></span>
+            <a href="mailto:niklevashov@yandex.ru">niklevashov@yandex.ru</a>
+            <br>
+            <span class="glyphicon glyphicon-user"></span>
+            <a href="http://vk.com/nlevashov">vk.com/nlevashov</a>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/docs.min.js"></script>
+    <script src="js/objects.js"></script>
+  </body>
+</html>
