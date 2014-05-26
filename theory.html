@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--link rel="shortcut icon" href="../../assets/ico/favicon.ico"-->
+
+    <title>Facility Location Problem solution with k-medians algo</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/dashboard.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+      .coordstable input {
+        border-width: medium medium 0px;
+        border-style: none none solid;
+        -moz-border-top-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        border-image: none;
+        width: 100%;
+      }
+      .wellpanel {
+        width: 100%;
+        height: 100%;
+        cursor: crosshair;
+      }
+      .point {
+        cursor:pointer;
+        position:absolute;
+      }
+      .facility {
+        font-size:28px;
+        cursor:default;
+        position:absolute;
+      }
+      .wrongCoords {
+        color:#BEBEBE;
+      }
+      .leftimg {
+        float: left;
+        margin-right: 3%;
+        width: 30%;
+      }
+    </style>
+  </head>
+
+  <body style="overflow-y:scroll">
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Facility Location Problem solution with k-medians algo</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/">Home</a></li>
+            <li><a href="instructions.html">Instructions</a></li>
+            <li class="active"><a href="theory.html">Theory</a></li>
+            <li><a href="#about" data-toggle="modal" data-target="#myModal">About</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="starter-template">
+        <h1>Theory</h1>
+        <div style="width:100%; float:left;">
+          <h3>Facility Location Problem</h3>
+          <p class="lead" style="font-size:18px">
+            There are <img src="img/x1xn.gif"> objects on map. Problem is fitting <img src="img/k.gif"> facilities on map, so that<br>
+            <img src="img/sumlimit.gif"><br>
+            where <img src="img/ro.gif"> is distance between <img src="img/a.gif"> and <img src="img/b.gif">,<br>
+            <img src="img/f.gif"> are sought-for facilities.
+          </p>
+        </div>
+        <div style="width:100%; float:left;">
+          <h3>"k-medians" algo</h3>
+          <p class="lead" style="font-size:18px">
+            The input of the program is objects coordinates and <img src="img/k.gif"> - facilities num.<br>
+            <br>
+            Step 1: Choose <img src="img/k.gif"> random points.<br>
+            <br>
+            Step 2: Divide all objects into clusters according to the following principle.
+            The set of objects forms a cluster around a facility which is closest to each set's object.<br>
+            <br>
+            Step 3: Move facilities to <a target="_blank" href="http://en.wikipedia.org/wiki/Center_of_mass#Definition">the mass center</a> of its cluster.<br>
+            <br>
+            Step 4: Assume the sum of distance between each point and mass center of its cluster.<br>
+            <br>
+            Step 5: Repeat steps 2-5 until the difference between current and previos sum from Step 4 is more than predetermined accuracy (very little number, in this realization it's 0.001).
+            The end of algorithm means that we cant improve situation.
+          </p>
+        </div>
+        <div style="width:100%; float:left;">
+          <h3>About algo</h3>
+          <p class="lead" style="font-size:18px">
+            The asymptotics of "k-medians" algorithm is <img src="img/asimptotics.gif">.<br>
+            <br>
+            The algorithm was invented by a Polish mathematician Hugo Steinhaus in 1957.
+            And gained popularity with James McQueen works in 1967.<br>
+            <br>
+            The main disadvantage is that the algorithm does not guarantee the approachability of the global minimum, 
+            just one of the local minimums. You can see it, for example, if you <a href="/">input</a> 
+            4 points which are close to each other and get <img src="img/k4.gif">. Obviosly, facilities must match with points. 
+            But sometimes it isn't so. Actually, it depends on location of random points from the first step of the algorithm.
+          </p>
+        </div>
+      
+      </div>
+
+    </div><!-- /.container -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 class="modal-title" id="myModalLabel">About</h3>
+          </div>
+          <div class="modal-body">
+            This site created by Nick Levashov, student of <a href="http://mipt.ru/">MIPT</a>, on May 2014, for solving Facility Location Problems online and for demonstrating "k-medians" algorithm.
+            <h4>My contacts:</h4>
+            <span class="glyphicon glyphicon-envelope"></span>
+            <a href="mailto:niklevashov@yandex.ru">niklevashov@yandex.ru</a>
+            <br>
+            <span class="glyphicon glyphicon-user"></span>
+            <a href="http://vk.com/nlevashov">vk.com/nlevashov</a>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/docs.min.js"></script>
+    <script src="js/objects.js"></script>
+  </body>
+</html>
