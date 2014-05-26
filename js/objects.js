@@ -367,7 +367,7 @@ function writeResult() {
     for (var i = resultTableSize; i < k; i++) {
         $('#resultTable tbody').append('<tr><td>' + (i + 1) + '</td><td><input type="text" readonly></td><td><input type="text" readonly></td></tr>');
     }
-    if (resultTableSize < k) resultTableSize = k;
+    if (resultTableSize < k) { resultTableSize = k; }
     for (var i = 0; i < k; i++) {
         $('#resultTable tbody tr td input').eq(i * 2).val(logs[logs.length - 1].f[i].x);
         $('#resultTable tbody tr td input').eq(i * 2 + 1).val(logs[logs.length - 1].f[i].y);
